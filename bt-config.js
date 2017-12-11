@@ -1,12 +1,21 @@
-'use strict';
+let transform = [
+    [
+        "babelify",
+        {
+            "presets": [
+                "es2015"
+            ],
+        }
+    ]
+];
 module.exports = {
-    dist: 'dist',
     build: {
         files: {
             'dist/tooltip.js': ['src/tooltip.js']
         },
         browserifyOptions: {
-            standalone: 'tooltip'
+            standalone: 'tooltip',
+            transform
         },
         minifyFiles: {
             'dist/tooltip-min.js': ['dist/tooltip.js']
@@ -15,7 +24,8 @@ module.exports = {
     },
     tests: {
         mocha: {
-            src: ['tests/*.js']
+            files: ['tests/*.js'],
+            transform
         }
     }
 };

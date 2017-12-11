@@ -1,9 +1,8 @@
 "use strict";
 var sinon = require('sinon');
-var TestUtils = require('test-utils');
 var Tooltip = require('../src/tooltip');
 var assert = require('assert');
-import Promise from 'promise';
+var Promise = require('es6-promise').Promise;
 import Module from 'module-js';
 
 describe('Tooltip', function () {
@@ -58,16 +57,16 @@ describe('Tooltip', function () {
         assert.equal(showSpy.callCount, showCallCount, 'show method was NOT fired on init');
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was NOT fired on init');
 
-        trigger.dispatchEvent(TestUtils.createEvent('click'));
+        trigger.click();
         showCallCount++;
         assert.equal(showSpy.callCount, showCallCount, 'show method was fired after first click on trigger');
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was NOT called');
-        trigger.dispatchEvent(TestUtils.createEvent('click'));
+        trigger.click();
         hideCallCount++;
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was fired after second click on trigger');
         assert.equal(showSpy.callCount, showCallCount, 'show method was NOT called');
         tooltip.destroy();
-        trigger.dispatchEvent(TestUtils.createEvent('click'));
+        trigger.click();
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was NOT fired after destroy');
         assert.equal(showSpy.callCount, showCallCount, 'show method was NOT fired');
         showSpy.restore();
@@ -81,7 +80,7 @@ describe('Tooltip', function () {
         var tooltip = new Tooltip({el: el, triggerClass: triggerClass});
         var trigger = el.getElementsByClassName(triggerClass)[0];
         var panel = el.getElementsByClassName('ui-tooltip-panel')[0];
-        trigger.dispatchEvent(TestUtils.createEvent('click'));
+        trigger.click();
         assert.equal(showSpy.callCount, 0, 'show method was NOT fired after click on trigger because no event was specified in init option');
         assert.equal(hideSpy.callCount, 0, 'hide method was NOT called');
         tooltip.destroy();
@@ -113,14 +112,17 @@ describe('Tooltip', function () {
             triggerClass: triggerClass
         });
         var trigger = el.getElementsByClassName(triggerClass)[0];
-        var panel = el.getElementsByClassName('ui-tooltip-panel')[0];
         assert.equal(showSpy.callCount, showCallCount, 'show method was NOT fired on init');
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was NOT fired on init');
-        trigger.dispatchEvent(TestUtils.createEvent('mouseenter'));
+        var evt = document.createEvent('MouseEvents');
+        evt.initEvent('mouseenter', true, true);
+        trigger.dispatchEvent(evt);
         showCallCount++;
         assert.equal(showSpy.callCount, showCallCount, 'show method was fired after hovering on trigger');
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was NOT called');
-        trigger.dispatchEvent(TestUtils.createEvent('mouseleave'));
+        var evt = document.createEvent('MouseEvents');
+        evt.initEvent('mouseleave', true, true);
+        trigger.dispatchEvent(evt);
         hideCallCount++;
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was fired after mouse stops hovering trigger');
         assert.equal(showSpy.callCount, showCallCount, 'show method was NOT called');
