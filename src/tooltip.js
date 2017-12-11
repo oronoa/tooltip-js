@@ -35,7 +35,8 @@ export default class Tooltip extends Module {
 
         this.options = options;
         this.el = options.el;
-        this.trigger = options.el.getElementsByClassName(this.options.triggerClass)[0];
+        this.trigger = options.el.getElementsByClassName(this.options.triggerClass)[0] ||
+            document.body.getElementsByClassName(this.options.triggerClass)[0];
 
         // setup events if needed
         if (options.showEvent) {
