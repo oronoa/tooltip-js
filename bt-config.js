@@ -5,6 +5,9 @@ let transform = [
             "presets": [
                 "es2015"
             ],
+            "plugins": [
+                "add-module-exports"
+            ]
         }
     ]
 ];

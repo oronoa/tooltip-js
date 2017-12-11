@@ -1,13 +1,12 @@
-"use strict";
-var sinon = require('sinon');
-var Tooltip = require('../src/tooltip');
-var assert = require('assert');
-var Promise = require('es6-promise').Promise;
+const sinon = require('sinon');
+const Tooltip = require('../src/tooltip');
+const assert = require('assert');
+const Promise = require('es6-promise').Promise;
 import Module from 'module-js';
 
 describe('Tooltip', function () {
 
-    var el;
+    let el;
 
     before(function () {
         el = document.createElement('div');
@@ -32,8 +31,8 @@ describe('Tooltip', function () {
     });
 
     it('should show and hide programmatically', function() {
-        var activeClass = 'ui-tooltip-active';
-        var tooltip = new Tooltip({el: el, activeClass: activeClass});
+        const activeClass = 'ui-tooltip-active';
+        const tooltip = new Tooltip({el: el, activeClass: activeClass});
         assert.ok(!el.classList.contains(activeClass), 'tooltip active class does not exist initially');
         assert.ok(!tooltip.isActive(), 'isActive() is falsy');
         tooltip.show();
@@ -46,14 +45,14 @@ describe('Tooltip', function () {
     });
 
     it('should show and hide when trigger is clicked', function() {
-        var showSpy = sinon.spy(Tooltip.prototype, 'show');
-        var showCallCount = 0;
-        var hideSpy = sinon.spy(Tooltip.prototype, 'hide');
-        var hideCallCount = 0;
-        var triggerClass = 'ui-tooltip-trigger';
-        var tooltip = new Tooltip({el: el, showEvent: 'click', hideEvent: 'click', triggerClass: triggerClass});
-        var trigger = el.getElementsByClassName(triggerClass)[0];
-        var panel = el.getElementsByClassName('ui-tooltip-panel')[0];
+        const showSpy = sinon.spy(Tooltip.prototype, 'show');
+        let showCallCount = 0;
+        const hideSpy = sinon.spy(Tooltip.prototype, 'hide');
+        let hideCallCount = 0;
+        const triggerClass = 'ui-tooltip-trigger';
+        const tooltip = new Tooltip({el: el, showEvent: 'click', hideEvent: 'click', triggerClass: triggerClass});
+        const trigger = el.getElementsByClassName(triggerClass)[0];
+        const panel = el.getElementsByClassName('ui-tooltip-panel')[0];
         assert.equal(showSpy.callCount, showCallCount, 'show method was NOT fired on init');
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was NOT fired on init');
 
@@ -74,12 +73,11 @@ describe('Tooltip', function () {
     });
 
     it('should NOT show and hide when no event options are specified', function() {
-        var showSpy = sinon.spy(Tooltip.prototype, 'show');
-        var hideSpy = sinon.spy(Tooltip.prototype, 'hide');
-        var triggerClass = 'ui-tooltip-trigger';
-        var tooltip = new Tooltip({el: el, triggerClass: triggerClass});
-        var trigger = el.getElementsByClassName(triggerClass)[0];
-        var panel = el.getElementsByClassName('ui-tooltip-panel')[0];
+        const showSpy = sinon.spy(Tooltip.prototype, 'show');
+        const hideSpy = sinon.spy(Tooltip.prototype, 'hide');
+        const triggerClass = 'ui-tooltip-trigger';
+        const tooltip = new Tooltip({el: el, triggerClass: triggerClass});
+        const trigger = el.getElementsByClassName(triggerClass)[0];
         trigger.click();
         assert.equal(showSpy.callCount, 0, 'show method was NOT fired after click on trigger because no event was specified in init option');
         assert.equal(hideSpy.callCount, 0, 'hide method was NOT called');
@@ -89,9 +87,9 @@ describe('Tooltip', function () {
     });
 
     it('should fire callback functions when showing and hiding', function() {
-        var onShowSpy = sinon.spy();
-        var onHideSpy = sinon.spy();
-        var tooltip = new Tooltip({el: el, onShow: onShowSpy, onHide: onHideSpy});
+        const onShowSpy = sinon.spy();
+        const onHideSpy = sinon.spy();
+        const tooltip = new Tooltip({el: el, onShow: onShowSpy, onHide: onHideSpy});
         tooltip.show();
         assert.equal(onShowSpy.callCount, 1, 'onShow callback is fired when tooltip shows');
         tooltip.hide();
@@ -100,27 +98,27 @@ describe('Tooltip', function () {
     });
 
     it('should show and hide on hover', function() {
-        var showSpy = sinon.spy(Tooltip.prototype, 'show');
-        var showCallCount = 0;
-        var hideSpy = sinon.spy(Tooltip.prototype, 'hide');
-        var hideCallCount = 0;
-        var triggerClass = 'ui-tooltip-trigger';
-        var tooltip = new Tooltip({
+        const showSpy = sinon.spy(Tooltip.prototype, 'show');
+        let showCallCount = 0;
+        const hideSpy = sinon.spy(Tooltip.prototype, 'hide');
+        let hideCallCount = 0;
+        const triggerClass = 'ui-tooltip-trigger';
+        const tooltip = new Tooltip({
             el: el,
             showEvent: 'mouseenter',
             hideEvent: 'mouseleave',
             triggerClass: triggerClass
         });
-        var trigger = el.getElementsByClassName(triggerClass)[0];
+        const trigger = el.getElementsByClassName(triggerClass)[0];
         assert.equal(showSpy.callCount, showCallCount, 'show method was NOT fired on init');
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was NOT fired on init');
-        var evt = document.createEvent('MouseEvents');
+        let evt = document.createEvent('MouseEvents');
         evt.initEvent('mouseenter', true, true);
         trigger.dispatchEvent(evt);
         showCallCount++;
         assert.equal(showSpy.callCount, showCallCount, 'show method was fired after hovering on trigger');
         assert.equal(hideSpy.callCount, hideCallCount, 'hide method was NOT called');
-        var evt = document.createEvent('MouseEvents');
+        evt = document.createEvent('MouseEvents');
         evt.initEvent('mouseleave', true, true);
         trigger.dispatchEvent(evt);
         hideCallCount++;
@@ -133,7 +131,7 @@ describe('Tooltip', function () {
 
     it('should return Module\'s show() method when calling show()', function() {
         Module.prototype.show.returns(Promise.resolve());
-        var tooltip = new Tooltip({el: el});
+        const tooltip = new Tooltip({el: el});
         return tooltip.show().then(function () {
             assert.equal(Module.prototype.show.callCount, 1);
             tooltip.destroy();
@@ -142,7 +140,7 @@ describe('Tooltip', function () {
 
     it('should return Module\'s hide() method when calling hide()', function() {
         Module.prototype.hide.returns(Promise.resolve());
-        var tooltip = new Tooltip({el: el});
+        const tooltip = new Tooltip({el: el});
         return tooltip.hide().then(function () {
             assert.equal(Module.prototype.hide.callCount, 1);
             tooltip.destroy();
@@ -151,7 +149,7 @@ describe('Tooltip', function () {
 
     it('should return Module\'s destroy() method when calling destroy()', function() {
         Module.prototype.destroy.returns(Promise.resolve());
-        var tooltip = new Tooltip({el: el});
+        const tooltip = new Tooltip({el: el});
         tooltip.destroy();
         assert.equal(Module.prototype.destroy.callCount, 1);
     });

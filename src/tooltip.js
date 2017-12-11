@@ -6,7 +6,7 @@ import Module from 'module-js';
  * Tooltip.
  * @class Tooltip
  */
-class Tooltip extends Module {
+export default class Tooltip extends Module {
 
     /**
      * When instantiated.
@@ -58,9 +58,9 @@ class Tooltip extends Module {
      * @private
      */
     _setupEvents (showEvent, hideEvent) {
-        var map = this._buildEventMap(showEvent, hideEvent),
-            key,
-            e;
+        const map = this._buildEventMap(showEvent, hideEvent);
+        let key;
+        let e;
         for (key in map) {
             if (map.hasOwnProperty(key)) {
                 e = map[key];
@@ -91,7 +91,7 @@ class Tooltip extends Module {
      * @private
      */
     _buildEventMap (showEvent, hideEvent) {
-        var map = {};
+        let map = {};
 
         if (showEvent === hideEvent) {
             // show event and hide events are the same
@@ -153,9 +153,9 @@ class Tooltip extends Module {
      * Destruction of this class.
      */
     destroy () {
-        var eventMap = this.eventMap,
-            key,
-            e;
+        const eventMap = this.eventMap;
+        let key;
+        let e;
 
         // destroy events
         if (eventMap) {
@@ -170,5 +170,3 @@ class Tooltip extends Module {
     }
 
 }
-
-module.exports = Tooltip;
