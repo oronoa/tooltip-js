@@ -17,7 +17,7 @@ module.exports = {
             'dist/tooltip.js': ['src/tooltip.js']
         },
         browserifyOptions: {
-            standalone: 'tooltip',
+            standalone: 'Tooltip',
             transform
         },
         minifyFiles: {
