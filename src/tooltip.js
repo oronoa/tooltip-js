@@ -1,12 +1,11 @@
-'use strict';
 import _ from 'lodash';
-import Module from 'module-js';
+import waitForElementTransition from 'wait-for-element-transition';
 
 /**
  * Tooltip.
  * @class Tooltip
  */
-class Tooltip extends Module {
+export default class Tooltip {
 
     /**
      * When instantiated.
@@ -31,11 +30,10 @@ class Tooltip extends Module {
             triggerClass: 'tooltip-trigger'
         }, options);
 
-        super(options.el, options);
-
         this.options = options;
         this.el = options.el;
-        this.trigger = options.el.getElementsByClassName(this.options.triggerClass)[0];
+        this.trigger = options.el.getElementsByClassName(this.options.triggerClass)[0] ||
+            document.body.getElementsByClassName(this.options.triggerClass)[0];
 
         // setup events if needed
         if (options.showEvent) {
@@ -45,12 +43,6 @@ class Tooltip extends Module {
     }
 
     /**
-     * Sets up events for showing/hiding tooltip.
-     * @deprecated since 1.1.0
-     */
-    setup () {}
-
-    /**
      * Sets up events.
      * @param {string} showEvent - The event string to hide tooltip
      * @param {string} hideEvent - The event string to show tooltip
@@ -58,9 +50,9 @@ class Tooltip extends Module {
      * @private
      */
     _setupEvents (showEvent, hideEvent) {
-        var map = this._buildEventMap(showEvent, hideEvent),
-            key,
-            e;
+        const map = this._buildEventMap(showEvent, hideEvent);
+        let key;
+        let e;
         for (key in map) {
             if (map.hasOwnProperty(key)) {
                 e = map[key];
@@ -91,7 +83,7 @@ class Tooltip extends Module {
      * @private
      */
     _buildEventMap (showEvent, hideEvent) {
-        var map = {};
+        let map = {};
 
         if (showEvent === hideEvent) {
             // show event and hide events are the same
@@ -126,7 +118,7 @@ class Tooltip extends Module {
         if (this.options.onShow) {
             this.options.onShow();
         }
-        return super.show();
+        return waitForElementTransition(this.el);
     }
 
     /**
@@ -138,7 +130,7 @@ class Tooltip extends Module {
         if (this.options.onHide) {
             this.options.onHide();
         }
-        return super.hide();
+        return waitForElementTransition(this.el);
     }
 
     /**
@@ -153,9 +145,9 @@ class Tooltip extends Module {
      * Destruction of this class.
      */
     destroy () {
-        var eventMap = this.eventMap,
-            key,
-            e;
+        const eventMap = this.eventMap;
+        let key;
+        let e;
 
         // destroy events
         if (eventMap) {
@@ -166,9 +158,7 @@ class Tooltip extends Module {
                 }
             }
         }
-        super.destroy();
+        this.el.classList.remove(this.options.activeClass);
     }
 
 }
-
-module.exports = Tooltip;

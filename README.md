@@ -34,7 +34,7 @@ Then activate your tooltip with the following:
 
 ```javascript
 var tooltip = new Tooltip({
-    el: document.body.getElementsByClassName('my-tooltip'),
+    el: document.body.querySelector('.my-tooltip'),
     activeClass: 'my-tooltip-active',
     triggerClass: 'my-tooltip-toggle-btn'
 });
