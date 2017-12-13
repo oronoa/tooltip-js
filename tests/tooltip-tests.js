@@ -113,7 +113,7 @@ describe('Tooltip', function () {
 
     it('should return promise result from waitForElementTransition when calling show()', function(done) {
         const tooltip = new Tooltip({el: el});
-        return tooltip.show().then(() => {
+        tooltip.show().then(() => {
             assert.ok(true);
             tooltip.destroy();
             done();
@@ -122,7 +122,7 @@ describe('Tooltip', function () {
 
     it('should return promise result from waitForElementTransition when calling hide()', function(done) {
         const tooltip = new Tooltip({el: el});
-        return tooltip.hide().then(() => {
+        tooltip.hide().then(() => {
             assert.ok(true);
             tooltip.destroy();
             done();
@@ -130,16 +130,17 @@ describe('Tooltip', function () {
     });
 
 
-    it('should remove active class after showing when calling destroy()', function() {
+    it('should remove active class after showing when calling destroy()', function(done) {
         const activeClass = 'my-class';
         const tooltip = new Tooltip({
             el,
             activeClass
         });
-        return tooltip.show().then(() => {
+        tooltip.show().then(() => {
             assert.ok(el.classList.contains(activeClass));
             tooltip.destroy();
             assert.ok(!el.classList.contains(activeClass));
+            done();
         });
     });
 
