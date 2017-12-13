@@ -1,33 +1,15 @@
 const sinon = require('sinon');
 const Tooltip = require('../src/tooltip');
 const assert = require('assert');
-const Promise = require('es6-promise').Promise;
-import Module from 'module-js';
 
 describe('Tooltip', function () {
 
     let el;
 
-    before(function () {
+    beforeEach(function () {
         el = document.createElement('div');
         el.className = 'container';
         el.innerHTML = '<span class="ui-tooltip-trigger"></span><div class="ui-tooltip-panel"></div>';
-    });
-
-    after(function () {
-        el = null;
-    });
-
-    beforeEach(function () {
-        sinon.stub(Module.prototype, 'show').returns(Promise.resolve());
-        sinon.stub(Module.prototype, 'hide').returns(Promise.resolve());
-        sinon.stub(Module.prototype, 'destroy');
-    });
-
-    afterEach(function () {
-        Module.prototype.show.restore();
-        Module.prototype.hide.restore();
-        Module.prototype.destroy.restore();
     });
 
     it('should show and hide programmatically', function() {
@@ -129,29 +111,36 @@ describe('Tooltip', function () {
         hideSpy.restore();
     });
 
-    it('should return Module\'s show() method when calling show()', function() {
-        Module.prototype.show.returns(Promise.resolve());
+    it('should return promise result from waitForElementTransition when calling show()', function(done) {
         const tooltip = new Tooltip({el: el});
-        return tooltip.show().then(function () {
-            assert.equal(Module.prototype.show.callCount, 1);
+        return tooltip.show().then(() => {
+            assert.ok(true);
             tooltip.destroy();
+            done();
         });
     });
 
-    it('should return Module\'s hide() method when calling hide()', function() {
-        Module.prototype.hide.returns(Promise.resolve());
+    it('should return promise result from waitForElementTransition when calling hide()', function(done) {
         const tooltip = new Tooltip({el: el});
-        return tooltip.hide().then(function () {
-            assert.equal(Module.prototype.hide.callCount, 1);
+        return tooltip.hide().then(() => {
+            assert.ok(true);
             tooltip.destroy();
+            done();
         });
     });
 
-    it('should return Module\'s destroy() method when calling destroy()', function() {
-        Module.prototype.destroy.returns(Promise.resolve());
-        const tooltip = new Tooltip({el: el});
-        tooltip.destroy();
-        assert.equal(Module.prototype.destroy.callCount, 1);
+
+    it('should remove active class after showing when calling destroy()', function() {
+        const activeClass = 'my-class';
+        const tooltip = new Tooltip({
+            el,
+            activeClass
+        });
+        return tooltip.show().then(() => {
+            assert.ok(el.classList.contains(activeClass));
+            tooltip.destroy();
+            assert.ok(!el.classList.contains(activeClass));
+        });
     });
 
 });

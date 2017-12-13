@@ -1,12 +1,11 @@
-'use strict';
 import _ from 'lodash';
-import Module from 'module-js';
+import waitForElementTransition from 'wait-for-element-transition';
 
 /**
  * Tooltip.
  * @class Tooltip
  */
-export default class Tooltip extends Module {
+export default class Tooltip {
 
     /**
      * When instantiated.
@@ -31,8 +30,6 @@ export default class Tooltip extends Module {
             triggerClass: 'tooltip-trigger'
         }, options);
 
-        super(options.el, options);
-
         this.options = options;
         this.el = options.el;
         this.trigger = options.el.getElementsByClassName(this.options.triggerClass)[0] ||
@@ -44,12 +41,6 @@ export default class Tooltip extends Module {
         }
 
     }
-
-    /**
-     * Sets up events for showing/hiding tooltip.
-     * @deprecated since 1.1.0
-     */
-    setup () {}
 
     /**
      * Sets up events.
@@ -127,7 +118,7 @@ export default class Tooltip extends Module {
         if (this.options.onShow) {
             this.options.onShow();
         }
-        return super.show();
+        return waitForElementTransition(this.el);
     }
 
     /**
@@ -139,7 +130,7 @@ export default class Tooltip extends Module {
         if (this.options.onHide) {
             this.options.onHide();
         }
-        return super.hide();
+        return waitForElementTransition(this.el);
     }
 
     /**
@@ -167,7 +158,7 @@ export default class Tooltip extends Module {
                 }
             }
         }
-        super.destroy();
+        this.el.classList.remove(this.options.activeClass);
     }
 
 }
